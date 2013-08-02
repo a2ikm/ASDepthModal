@@ -168,17 +168,20 @@ static NSInteger const kDepthModalOptionTapMask = 1 << 9;
     self.popupView = [[UIView alloc] initWithFrame:view.frame];
     self.popupView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.popupView addSubview:view];
+    [self.popupView release];
     
     self.coverView = [[UIView alloc] initWithFrame:self.rootViewController.view.bounds];
     self.coverView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.coverView.backgroundColor = [UIColor colorWithRed:00/255.0 green:00/255.0 blue:00/255.0 alpha:0.5];
     [self.view addSubview:self.coverView];
+    [self.coverView release];
     
     if ((options & kDepthModalOptionTapMask) == ASDepthModalOptionTapOutsideToClose)
     {    
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCloseAction:)];
         tapGesture.delegate = self;
         [self.coverView addGestureRecognizer:tapGesture];
+        [tapGesture release];
     }
     
     [self.coverView addSubview:self.popupView];
@@ -195,6 +198,7 @@ static NSInteger const kDepthModalOptionTapMask = 1 << 9;
         self.blurView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.blurView.alpha = 0;
         [self.rootViewController.view addSubview:self.blurView];
+        [self.blurView release];
     }
     
     [self.rootViewController.view.layer setMasksToBounds:YES];
@@ -250,7 +254,7 @@ static NSInteger const kDepthModalOptionTapMask = 1 << 9;
 
 + (void)presentView:(UIView *)view backgroundColor:(UIColor *)color options:(ASDepthModalOptions)options completionHandler:(void(^)())handler
 {
-    ASDepthModalViewController *modalViewController = [[ASDepthModalViewController alloc] init];
+    ASDepthModalViewController *modalViewController = [[[ASDepthModalViewController alloc] init] autorelease];
     
     [modalViewController presentView:view withBackgroundColor:(UIColor *)color options:options completionHandler:handler];
 }
